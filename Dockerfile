@@ -35,8 +35,11 @@ WORKDIR /tmp
 
 # Copy manager requirements and install stable dependencies
 COPY --from=builder /build/ComfyUI-Manager/requirements.txt /tmp/manager-requirements.txt
-RUN pip --no-cache-dir install --no-deps \
-  https://comfy-org.github.io/wheels/sageattention/sageattention-2.2.0+cu128torch28-cp312-cp312-manylinux_2_34_x86_64.manylinux_2_35_x86_64.whl
+
+RUN pip --no-cache-dir install -r /tmp/manager-requirements.txt && \
+    pip --no-cache-dir install huggingface-hub && \
+    pip --no-cache-dir install --no-deps \
+      https://github.com/Comfy-Org/wheels/releases/download/sageattention-latest/sageattention-2.2.0%2Bcu128torch2.8-cp312-cp312-manylinux_2_34_x86_64.manylinux_2_35_x86_64.whl
 
 # Copy and install ComfyUI requirements
 COPY --from=builder /build/ComfyUI/requirements.txt /tmp/comfyui-requirements.txt
